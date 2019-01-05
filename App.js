@@ -1,47 +1,27 @@
 import React from 'react';
-import { MapView} from 'expo';
+import { createStackNavigator, createAppContainer } from "react-navigation";
+import Map from './components/Map'
+import Details from './components/Details'
 
-
-const latitude= -15.3875;
-const longitude= 28.3228;
-class App extends React.Component {
+export default class App extends React.Component {
   constructor(props){
-    super(props)
-    this.state = {
-      region: {
-        latitude: -15.3875,
-        longitude: 28.3228,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      },
-     
+    super(props)  
   }
-  // this.onRegionChange = this.onRegionChange.bind(this)
-}
+
     
-  // onRegionChange(region) {
-  //  this.setState({
-  //    region: region
-  //  })
-  // }
   render() {
-    const coordinate = {latitude,longitude}
+    
     return (
-      <MapView
-      style={{flex:1}}
-      region={this.state.region}
-      // onRegionChange={this.onRegionChange}
-      >
-        <MapView.Marker
-      coordinate={coordinate}
-       title={'title'}
-       description={'description'}
-       draggable
-    onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
-    />
-      </MapView>
+      <Root/>
     );
   }
 }
 
-export default App;
+const Root = createAppContainer(createStackNavigator({
+  Home: Map,
+  Details: Details,
+  
+},{
+  initialRouteName: 'Details'
+}));
+
