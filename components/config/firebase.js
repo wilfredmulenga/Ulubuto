@@ -16,6 +16,5 @@ var config = {
   messagingSenderId: MESSAGING_SENDER_ID
 };
 firebase.initializeApp(config);
-console.log(API_KEY)
 var Firebase = firebase
 export default Firebase;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import Map from './components/Map'
+import HomeScreen from './components/HomeScreen'
 import Details from './components/Details'
 import Auth from './components/Auth'
 
@@ -19,11 +19,11 @@ export default class App extends React.Component {
 }
 
 const Root = createAppContainer(createStackNavigator({
-  Home: Map,
+  Home: HomeScreen,
   Details: Details,
   Auth: Auth
   
 },{
-  initialRouteName: 'Details'
+  initialRouteName: 'Home'
 }));
 
