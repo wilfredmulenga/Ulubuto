@@ -1,8 +1,8 @@
 import React from 'react';
 import Map from './Map'
 import { Location, Permissions } from 'expo'
-import {Text,Container, Button} from 'native-base'
-import {View} from 'react-native'
+import {Text,Container } from 'native-base'
+import {View,Button} from 'react-native'
 
 const deltas = {
     latitudeDelta: 0.0922,
@@ -19,7 +19,7 @@ class HomeScreen extends React.Component {
       }
     }
     componentWillMount() {
-        //this.getLocationAsync();
+        this.getLocationAsync();
       }
       getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -44,14 +44,23 @@ class HomeScreen extends React.Component {
         
             if(true){
                 return(
-                      <View style={{flex:1}}>
-                          <Map/>
-                          <View style={{flex:1,position:'absolute',flexDirection:'column',justifyContent:'center', alignItems:'flex-end'}}>
-                          <Button>
-            <Text>Click Me!</Text>
-          </Button>
-                          </View>
-                      </View>
+                  <View style={{flex:1}}>
+                    <Map/>
+                    <View
+        style={{
+            position: 'absolute',//use absolute position to show button on top of the map
+            top: '80%', //for center align
+            alignSelf: 'center' //for align to right
+        }}
+    >
+      <Button title='SET TRASH'onPress={() => this.props.navigation.navigate('Details',{location:this.state.region})}/>
+    
+     
+      </View>
+                  </View>
+                          
+                         
+                     
                 )
             }else{
                 return(

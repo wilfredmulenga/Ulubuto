@@ -1,5 +1,7 @@
 import React from 'react';
 import { MapView} from 'expo';
+import {Text,Container, Button} from 'native-base'
+import {View} from 'react-native'
 
 const deltas = {
   latitudeDelta: 0.0922,
@@ -25,17 +27,15 @@ class Map extends React.Component {
   //  })
   // }
   render() {
-    return (
-      <MapView
+    return ( 
+        <MapView
       style={{flex:1}}
       region={this.props.region}
       initialRegion={{ ...initialRegion, ...deltas }}
       showsUserLocation
         showsMyLocationButton
-     
       // onRegionChange={this.onRegionChange}
-      >
-      </MapView>
+      />
     );
   }
 }

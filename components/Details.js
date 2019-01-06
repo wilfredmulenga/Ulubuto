@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container,Form, Textarea, Header, Content, Card, CardItem, Text, Icon, Right, ListItem, CheckBox, Body } from 'native-base';
 import TextArea from './Textarea'
-import {TimePickerAndroid, DatePickerAndroid} from 'react-native'
+import {TimePickerAndroid, DatePickerAndroid, Button} from 'react-native'
+import Firebase from './config/firebase'
 
 
 export default class Details extends Component {
@@ -19,8 +20,22 @@ export default class Details extends Component {
     }
     this.showTime =this.showTime.bind(this)  
     this.showDate =  this.showDate.bind(this) 
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
+    handleSubmit=()=>{
+      console.log("hello")
+      Firebase.database()
+      .ref(`Users/`)
+      .push({
+          location: this.props.navigation.getParam('location'),
+          checkbox1:this.state.checkbox1,
+          checkbox2:this.state.checkbox2,
+          checkbox3:this.state.checkbox3,
+          checkbox4:this.state.checkbox4,
+          textarea:this.state.textarea
+      })
+    }
   showTime =  async() =>{
     try {
       const {action, hour, minute} = await TimePickerAndroid.open({
@@ -119,6 +134,9 @@ export default class Details extends Component {
             <Textarea rowSpan={5} bordered placeholder="Textarea" />
           </Form>
         </Content>
+        <Body style={{flexDirection: "row", justifyContent: "center"}}>
+          <Button title='CONFIRM' onPress={()=>this.handleSubmit()} />
+        </Body>
         </Content>
       </Container>
       
