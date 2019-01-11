@@ -2,7 +2,7 @@ import React from 'react';
 import Map from './Map'
 import { Location, Permissions } from 'expo'
 import {Text,Container } from 'native-base'
-import {View,Button} from 'react-native'
+import {View,Button, Alert} from 'react-native'
 
 const deltas = {
     latitudeDelta: 0.0922,
@@ -15,17 +15,27 @@ class HomeScreen extends React.Component {
       super(props)
       this.state={
           region : null,
-          show : false
-      }
+          show : false,
+          locationStatus : false
+      } 
+      this.locationPrompt = this.locationPrompt.bind(this)
+     // this.locationPrompt()
     }
+    locationPrompt = ()=>{
+      Alert.alert('turn on location services')
+    }
+
     componentWillMount() {
         this.getLocationAsync();
       }
       getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        console.log(status)
         if (status !== 'granted') {
+          console.log('location')
           this.setState({
-            errorMessage: 'Permission to access location was denied'
+            errorMessage: 'Permission to access location was denied',
+            locationStatus : false
           });
         }
     
@@ -53,7 +63,7 @@ class HomeScreen extends React.Component {
             alignSelf: 'center' //for align to right
         }}
     >
-      <Button title='SET TRASH'onPress={() => this.props.navigation.navigate('Details',{location:this.state.region})}/>
+      <Button title='SET TRASH PICKUP'onPress={() => this.props.navigation.navigate('Details',{location:this.state.region})}/>
     
      
       </View>

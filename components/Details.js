@@ -4,7 +4,7 @@ import TextArea from './Textarea'
 import {TimePickerAndroid, DatePickerAndroid, Button} from 'react-native'
 import Firebase from './config/firebase'
 
-
+var userUID
 export default class Details extends Component {
   constructor(props){
     super(props)
@@ -16,25 +16,46 @@ export default class Details extends Component {
       checkbox2: false,
       checkbox3: false,
       checkbox4: false,
-      textarea: '' 
+      textarea: '',
+      userUID: ''
     }
     this.showTime =this.showTime.bind(this)  
     this.showDate =  this.showDate.bind(this) 
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleAuth = this.handleAuth.bind(this)
+    this.handleAuth()
+  }
+
+  handleAuth = ()=>{
+    //uncomment when ready to use authentication
+Firebase.auth().signInAnonymously().catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+  console.log(errorCode,errorMessage)
+});
+Firebase.auth().onAuthStateChanged((user) => {
+  if (user.uid != null) {
+    console.log("We are authenticated now!", user.uid);
+    userUID = user.uid
+  }
+
+
+})
   }
 
     handleSubmit=()=>{
-      console.log("hello")
+     
       Firebase.database()
-      .ref(`Users/`)
+      .ref(`Users/${userUID}`)
       .push({
           location: this.props.navigation.getParam('location'),
-          checkbox1:this.state.checkbox1,
-          checkbox2:this.state.checkbox2,
-          checkbox3:this.state.checkbox3,
-          checkbox4:this.state.checkbox4,
-          textarea:this.state.textarea
+          details:`${this.state.checkbox1}, ${this.state.checkbox2}, ${this.state.checkbox3}, ${this.state.checkbox4}`,    
+          date:this.state.date,
+          time: this.state.time
       })
+      this.props.navigation.navigate('Order',{userUID:userUID})
     }
   showTime =  async() =>{
     try {
@@ -83,6 +104,7 @@ export default class Details extends Component {
              </CardItem>
             <ListItem>
           <Body>
+            {/* try to put the date and time in one line similar to google calendar when creating a reminder or event */}
           <Text onPress={()=>this.showDate()}>Set Date</Text>
           </Body>
           <Right>
@@ -100,7 +122,7 @@ export default class Details extends Component {
            </Card>
            <Card>
              <CardItem header>
-             <Text>Select the type of trash you have {process.env.REACT_APP_API_KEY}</Text>
+             <Text>Select the type of trash you have</Text>
              </CardItem>
              <Content>
           <ListItem>
