@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { Container,Form, Textarea, Header, Content, Card, CardItem, Text, Icon, Right, ListItem, CheckBox, Body } from 'native-base';
-import TextArea from './Textarea'
-import {TimePickerAndroid, DatePickerAndroid, Button} from 'react-native'
+import { Container,Form, Textarea,  Content, Card, CardItem, Text, Right, ListItem, CheckBox, Body, Input, Item } from 'native-base';
+import {TimePickerAndroid, DatePickerAndroid, Button, KeyboardAvoidingView, ScrollView} from 'react-native'
 import Firebase from './config/firebase'
+ 
+
 
 var userUID
 export default class Details extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('title'),
+    };
+  };
   constructor(props){
     super(props)
     this.state ={
@@ -17,7 +23,8 @@ export default class Details extends Component {
       checkbox3: false,
       checkbox4: false,
       textarea: '',
-      userUID: ''
+      userUID: '',
+      phoneNumber:''
     }
     this.showTime =this.showTime.bind(this)  
     this.showDate =  this.showDate.bind(this) 
@@ -37,7 +44,7 @@ Firebase.auth().signInAnonymously().catch(function(error) {
 });
 Firebase.auth().onAuthStateChanged((user) => {
   if (user.uid != null) {
-    console.log("We are authenticated now!", user.uid);
+   
     userUID = user.uid
   }
 
@@ -47,14 +54,19 @@ Firebase.auth().onAuthStateChanged((user) => {
 
     handleSubmit=()=>{
      
-      Firebase.database()
-      .ref(`Users/${userUID}`)
-      .push({
-          location: this.props.navigation.getParam('location'),
-          details:`${this.state.checkbox1}, ${this.state.checkbox2}, ${this.state.checkbox3}, ${this.state.checkbox4}`,    
-          date:this.state.date,
-          time: this.state.time
-      })
+      // Firebase.database()
+      // .ref(`Users/${userUID}`)
+      // .push({
+      //     location: this.props.navigation.getParam('location'),
+      //     details:`${this.state.checkbox1}, ${this.state.checkbox2}, ${this.state.checkbox3}, ${this.state.checkbox4}`,    
+      //     date:this.state.date,
+      //     time: this.state.time,
+      //     phoneNumber: this.state.phoneNumber,
+      //     status: 'pending'
+      // })
+      //send an email
+     
+
       this.props.navigation.navigate('Order',{userUID:userUID})
     }
   showTime =  async() =>{
@@ -95,8 +107,34 @@ Firebase.auth().onAuthStateChanged((user) => {
  
   render() {
     return (
+      // <ScrollView>
+      // <KeyboardAvoidingView behavior="padding" enabled>
+      //    <Form>
+      //       <Item>
+      //          <Input placeholder="contact number" />
+      //       </Item>
+      //       <Item>
+      //          <Input placeholder="contact number" />
+      //       </Item>
+      //       <Item>
+      //          <Input placeholder="contact number" />
+      //       </Item>
+      //       <Item>
+      //          <Input placeholder="contact number" />
+      //       </Item>
+      //       <Item>
+      //          <Input placeholder="contact number" />
+      //       </Item>
+      //       <Item>
+      //          <Input placeholder="contact number" />
+      //       </Item>
+      //       <Item>
+      //          <Input placeholder="contact number" />
+      //       </Item>
+      //        </Form>
+      // </KeyboardAvoidingView>
+      // </ScrollView>
       <Container>
-        <Header />
         <Content>
           <Card>
             <CardItem header>
@@ -124,7 +162,7 @@ Firebase.auth().onAuthStateChanged((user) => {
              <CardItem header>
              <Text>Select the type of trash you have</Text>
              </CardItem>
-             <Content>
+          
           <ListItem>
             <CheckBox checked={this.state.checkbox1} onPress={()=>this.setState({checkbox1:!this.state.checkbox1})} />
             <Body>
@@ -149,13 +187,27 @@ Firebase.auth().onAuthStateChanged((user) => {
               <Text>Food</Text>
             </Body>
           </ListItem>
-        </Content>
+        
            </Card>
-           <Content padder>
-          <Form>
-            <Textarea rowSpan={5} bordered placeholder="Textarea" />
+    
+         <Card>
+             <CardItem header>
+               <Text>Contact Number</Text>
+             </CardItem>
+             <Form>
+            <Item>
+              <Input value={this.state.phoneNumber} placeholder="contact number" />
+            </Item>
+            </Form>
+           </Card>
+          <ScrollView>
+            <KeyboardAvoidingView behavior="padding" enabled>
+          <Form padder>
+            <Textarea value={this.state.comment} rowSpan={5} bordered placeholder="Notes" />
           </Form>
-        </Content>
+          </KeyboardAvoidingView>
+          </ScrollView>  
+     
         <Body style={{flexDirection: "row", justifyContent: "center"}}>
           <Button title='CONFIRM' onPress={()=>this.handleSubmit()} />
         </Body>

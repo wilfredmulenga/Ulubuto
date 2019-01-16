@@ -8,21 +8,7 @@ import store from './components/store'
 import Firebase from './components/config/firebase'
 import {connect} from 'react-redux'
 import {addUserUID} from './components/actions'
-
-const mapStateToProps = (userUID) => {
-    return {userUID: userUID}
-  };
-  
-  
-  
-  const mapDispatchToProps = (dispatch) => {
-    return {
-      submitNewTodo: (userUID) => {
-        dispatch(addUserUID(userUID))
-      }
-    }
-  };
-
+import Navigation from './components/Navigation'
 
 
  class App extends React.Component {
@@ -34,10 +20,7 @@ const mapStateToProps = (userUID) => {
     
   render() {
     
-    return (
-      <Provider store={store()}>
-      {/* <ConnectAuth/> */}
-      <Root /></Provider>
+    return (      <Root />
     );
   }
 }
@@ -49,9 +32,12 @@ const Root = createAppContainer(createStackNavigator({
   
   
 },{
-  initialRouteName: 'Order'
+  initialRouteName: 'Home'
 }));
 
+
+
+// export default createAppContainer(TabNavigator);
 // class Auth extends React.Componet{
 //   constructor(props){
 //     super(props)

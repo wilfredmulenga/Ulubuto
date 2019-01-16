@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.2.3",
+    "emailjs-com": "^2.3.2",
     "expo": "^31.0.2",
     "firebase": "^5.7.2",
     "native-base": "^2.10.0",

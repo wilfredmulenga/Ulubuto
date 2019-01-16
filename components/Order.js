@@ -5,7 +5,6 @@ import Firebase from './config/firebase'
 var element = []
 var listOfOrders
 
-
 export default class Order extends React.Component{
     constructor(props){
         super(props)
@@ -19,13 +18,13 @@ export default class Order extends React.Component{
     }
 
     loadOrders=()=>{
-        console.log(this.state.userUID)
+       
         Firebase.database()
         .ref(`Users/${this.state.userUID}`)
         .once('value', (snapshot) => {
             if (snapshot.val() !== null) {
                 listOfOrders = snapshot.val()
-                console.log(snapshot.val())
+             
                 for (const index in listOfOrders) {
                     element.push(listOfOrders[index])
                 }
