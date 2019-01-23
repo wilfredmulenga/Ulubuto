@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Container,Form, Textarea,  Content, Card, CardItem, Text, Right, ListItem, CheckBox, Body, Input, Item } from 'native-base';
-import {TimePickerAndroid, DatePickerAndroid, Button, KeyboardAvoidingView, ScrollView} from 'react-native'
+import {Card, Text, Input, CheckBox} from 'react-native-elements'
+import {TimePickerAndroid, DatePickerAndroid, Button, ScrollView, View, TextInput} from 'react-native'
 import Firebase from './config/firebase'
+import {Header} from 'react-navigation'
+
  
 
-
-var userUID
 export default class Details extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -22,7 +22,7 @@ export default class Details extends Component {
       checkbox2: false,
       checkbox3: false,
       checkbox4: false,
-      textarea: '',
+      comment: '',
       userUID: '',
       phoneNumber:''
     }
@@ -30,8 +30,12 @@ export default class Details extends Component {
     this.showDate =  this.showDate.bind(this) 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAuth = this.handleAuth.bind(this)
+    this.getCurrentDate = this.getCurrentDate.bind(this)
+   
     this.handleAuth()
   }
+
+
 
   handleAuth = ()=>{
     //uncomment when ready to use authentication
@@ -52,22 +56,39 @@ Firebase.auth().onAuthStateChanged((user) => {
 })
   }
 
-    handleSubmit=()=>{
-     
-      // Firebase.database()
-      // .ref(`Users/${userUID}`)
-      // .push({
-      //     location: this.props.navigation.getParam('location'),
-      //     details:`${this.state.checkbox1}, ${this.state.checkbox2}, ${this.state.checkbox3}, ${this.state.checkbox4}`,    
-      //     date:this.state.date,
-      //     time: this.state.time,
-      //     phoneNumber: this.state.phoneNumber,
-      //     status: 'pending'
-      // })
-      //send an email
-     
+    handleSubmit= async ()=>{
+      //send order to firebase
+      var details='';
+      (this.state.checkbox1)? details += 'Plastic Bottles, ': '';
+      (this.state.checkbox2)? details += 'Cardboard Box, ': '';
+      (this.state.checkbox3)? details += 'Paper, ': '';
+      (this.state.checkbox4)? details += 'Food': '';
+      Firebase.database()
+      .ref(`Users/${userUID}/pending`)
+      .push({
+          location: this.props.navigation.getParam('location'),
+          details: details,    
+          date:this.state.date,
+          time: this.state.time,
+          phoneNumber: this.state.phoneNumber,
+          comment: this.state.comment,
+        
+      })
+      //send an sms
+      var message = `New Trash PickUp Request. Location: ${this.props.navigation.getParam('location')}, details: ${details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
+      await fetch("http://bf8fb1c5.ngrok.io/?message="+message).then((res)=>{
+      console.log(res);
+      if(res.status == 200){
+        //this.setState({sucess: true})
+        console.log("success")
+      }
+    }).catch((err)=>{
+      console.log("err"+err);
+    });
+  
 
-      this.props.navigation.navigate('Order',{userUID:userUID})
+      this.props.navigation.navigate('Order',{userUID:userUID,title:'Pending Trash PickUps'})
+      
     }
   showTime =  async() =>{
     try {
@@ -104,116 +125,105 @@ Firebase.auth().onAuthStateChanged((user) => {
       console.warn('Cannot open date picker', message);
     }
   }
- 
+
+  getCurrentDate = ()=>{
+    var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth() + 1; //January is 0!
+var yyyy = today.getFullYear();
+var hr = today.getHours()
+var mins = today.getMinutes()
+if (dd < 10) {
+  dd = '0' + dd;
+}
+
+if (mm < 10) {
+  mm = '0' + mm;
+}
+if(mins < 10){
+  mins = '0' + mins
+}
+today = mm + '/' + dd + '/' + yyyy;
+this.setState({
+  date : today
+})
+this.setState({
+  time : `${hr}:${mins}`
+})
+  }
+ componentWillMount(){
+  this.getCurrentDate()
+ }
   render() {
     return (
-      // <ScrollView>
-      // <KeyboardAvoidingView behavior="padding" enabled>
-      //    <Form>
-      //       <Item>
-      //          <Input placeholder="contact number" />
-      //       </Item>
-      //       <Item>
-      //          <Input placeholder="contact number" />
-      //       </Item>
-      //       <Item>
-      //          <Input placeholder="contact number" />
-      //       </Item>
-      //       <Item>
-      //          <Input placeholder="contact number" />
-      //       </Item>
-      //       <Item>
-      //          <Input placeholder="contact number" />
-      //       </Item>
-      //       <Item>
-      //          <Input placeholder="contact number" />
-      //       </Item>
-      //       <Item>
-      //          <Input placeholder="contact number" />
-      //       </Item>
-      //        </Form>
-      // </KeyboardAvoidingView>
-      // </ScrollView>
-      <Container>
-        <Content>
-          <Card>
-            <CardItem header>
-              <Text>When would you like your trash picked up</Text>
-             </CardItem>
-            <ListItem>
-          <Body>
-            {/* try to put the date and time in one line similar to google calendar when creating a reminder or event */}
-          <Text onPress={()=>this.showDate()}>Set Date</Text>
-          </Body>
-          <Right>
-          <Text>{this.state.date}</Text>
-          </Right>
-           </ListItem>
-           <ListItem>
-          <Body>
-          <Text onPress={()=>this.showTime()}>Set time</Text>
-          </Body>
-          <Right>
-          <Text>{this.state.time}</Text>
-          </Right>
-           </ListItem>
-           </Card>
-           <Card>
-             <CardItem header>
-             <Text>Select the type of trash you have</Text>
-             </CardItem>
-          
-          <ListItem>
-            <CheckBox checked={this.state.checkbox1} onPress={()=>this.setState({checkbox1:!this.state.checkbox1})} />
-            <Body>
-              <Text>Plastic Bottles</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-          <CheckBox checked={this.state.checkbox2} onPress={()=>this.setState({checkbox2:!this.state.checkbox2})} />
-            <Body>
-              <Text>Cardboard Box</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-          <CheckBox checked={this.state.checkbox3} onPress={()=>this.setState({checkbox3:!this.state.checkbox3})} />
-            <Body>
-              <Text>Paper</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-          <CheckBox checked={this.state.checkbox3} onPress={()=>this.setState({checkbox3:!this.state.checkbox3})} />
-            <Body>
-              <Text>Food</Text>
-            </Body>
-          </ListItem>
-        
-           </Card>
-    
-         <Card>
-             <CardItem header>
-               <Text>Contact Number</Text>
-             </CardItem>
-             <Form>
-            <Item>
-              <Input value={this.state.phoneNumber} placeholder="contact number" />
-            </Item>
-            </Form>
-           </Card>
-          <ScrollView>
-            <KeyboardAvoidingView behavior="padding" enabled>
-          <Form padder>
-            <Textarea value={this.state.comment} rowSpan={5} bordered placeholder="Notes" />
-          </Form>
-          </KeyboardAvoidingView>
-          </ScrollView>  
-     
-        <Body style={{flexDirection: "row", justifyContent: "center"}}>
-          <Button title='CONFIRM' onPress={()=>this.handleSubmit()} />
-        </Body>
-        </Content>
-      </Container>
       
+      <ScrollView>
+      <View style={styles.container}>
+          <View>  
+              <Text style={styles.heading}  h5>When would you like your trash picked up</Text>
+            {/* try to put the date and time in one line similar to google calendar when creating a reminder or event */}
+            <Text style={styles.text} onPress={()=>this.showDate()}>Date: {this.state.date}</Text>
+    
+          <Text style={styles.text} onPress={()=>this.showTime()}>Time: {this.state.time}</Text>
+        
+     
+         
+ 
+             <Text style={styles.heading}>Select the type of trash you have</Text>
+             
+
+            <CheckBox title='Plastic Bottles' checked={this.state.checkbox1} onPress={()=>this.setState({checkbox1:!this.state.checkbox1})} />
+        
+              
+           
+   
+         
+          <CheckBox title='Cardboard Box' checked={this.state.checkbox2} onPress={()=>this.setState({checkbox2:!this.state.checkbox2})} />
+          
+           
+         
+          <CheckBox title='Paper' checked={this.state.checkbox3} onPress={()=>this.setState({checkbox3:!this.state.checkbox3})} />          
+          <CheckBox title='Food' checked={this.state.checkbox4} onPress={()=>this.setState({checkbox4:!this.state.checkbox4})} />      
+           
+               <Text style={styles.heading}>Contact Number</Text>         
+              <Input id='phoneNumber' value={this.state.phoneNumber} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder="contact number" />       
+            <TextInput value={this.state.comment}  editable = {true}
+         multiline={true} onChangeText={(comment) => this.setState({comment})}
+         numberOfLines={4} placeholder="Notes" />
+       
+          
+     </View>
+        <View style={styles.button}>
+          <Button title='CONFIRM' onPress={()=>this.handleSubmit()} />
+        </View>
+       
+      </View>
+      </ScrollView>
+    
     );
+  }
+}
+
+const styles = {
+  container:{
+    padding:20,
+   //  backgroundColor: '008000'
+  },
+  heading:{
+    fontSize:20,
+    paddingBottom:5
+  },
+  text:{
+    paddingTop:10,
+    paddingBottom:10,
+    fontSize:16
+  },
+  textInput:{
+
+  },
+  button:{
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingTop:20
   }
 }

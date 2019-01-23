@@ -1,15 +1,15 @@
 import React from 'react';
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createStackNavigator, createAppContainer, createDrawerNavigator } from "react-navigation";
 import HomeScreen from './components/HomeScreen'
 import Details from './components/Details'
-import Order from './components/Order'
+import PendingOrders from './components/PendingOrders'
+import CompletedOrders from './components/CompletedOrders'
 import {Provider} from 'react-redux';
 import store from './components/store'
 import Firebase from './components/config/firebase'
 import {connect} from 'react-redux'
 import {addUserUID} from './components/actions'
-import Navigation from './components/Navigation'
-
+import Demo from './components/Demo'
 
  class App extends React.Component {
   constructor(props){
@@ -20,21 +20,43 @@ import Navigation from './components/Navigation'
     
   render() {
     
-    return (      <Root />
+    return (     
+      
+      <MyApp />
     );
   }
 }
 
-const Root = createAppContainer(createStackNavigator({
-  Home: HomeScreen,
-  Details: Details,
-  Order : Order
+// const Root = createAppContainer(createStackNavigator({
+//   Home: HomeScreen,
+//   Details: Details,
+//   Order : Order,
+//   Demo: Demo
   
   
-},{
-  initialRouteName: 'Home'
-}));
+// },{
+//   initialRouteName: 'Home'
+// }));
 
+const MyDrawerNavigator = createDrawerNavigator({
+  Home: {
+    screen: HomeScreen,
+  },
+  Details: {
+    screen: Details,
+  },
+  PendingOrders : {
+    screen : PendingOrders
+  },
+  CompletedOrders : {
+    screen : CompletedOrders
+  },
+  // UserProfile : {
+  //   screen : UserProfile
+  // }
+});
+
+const MyApp = createAppContainer(MyDrawerNavigator);
 
 
 // export default createAppContainer(TabNavigator);
