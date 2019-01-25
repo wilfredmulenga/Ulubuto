@@ -2,8 +2,9 @@ import React from 'react';
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from "react-navigation";
 import HomeScreen from './components/HomeScreen'
 import Details from './components/Details'
+import Details2 from './components/Details2'
+import Orders from './components/Orders'
 import PendingOrders from './components/PendingOrders'
-import CompletedOrders from './components/CompletedOrders'
 import {Provider} from 'react-redux';
 import store from './components/store'
 import Firebase from './components/config/firebase'
@@ -39,18 +40,27 @@ import Demo from './components/Demo'
 // }));
 
 const MyDrawerNavigator = createDrawerNavigator({
-  Home: {
-    screen: HomeScreen,
+ 
+  Orders : {
+    screen : Orders
   },
+
   Details: {
     screen: Details,
   },
-  PendingOrders : {
-    screen : PendingOrders
+  Details2: {
+    screen: Details2,
   },
-  CompletedOrders : {
-    screen : CompletedOrders
+  Demo: {
+    screen : Demo
   },
+  Home: {
+    screen: HomeScreen,
+  },
+ 
+  
+  
+  
   // UserProfile : {
   //   screen : UserProfile
   // }

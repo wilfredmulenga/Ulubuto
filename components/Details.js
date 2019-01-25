@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
-import {Card, Text, Input, CheckBox} from 'react-native-elements'
-import {TimePickerAndroid, DatePickerAndroid, Button, ScrollView, View, TextInput} from 'react-native'
+import {Card, CheckBox, Header} from 'react-native-elements'
+import {TimePickerAndroid, DatePickerAndroid, Button, ScrollView, View,Text} from 'react-native'
 import Firebase from './config/firebase'
-import {Header} from 'react-navigation'
+
 
  
 
 export default class Details extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: navigation.getParam('title'),
-    };
-  };
   constructor(props){
     super(props)
     this.state ={
@@ -22,17 +17,17 @@ export default class Details extends Component {
       checkbox2: false,
       checkbox3: false,
       checkbox4: false,
-      comment: '',
-      userUID: '',
-      phoneNumber:''
+     
+      userUID: 'uOuwqfL9oJbsCex5JYSxAaoDeCz1',
+   
     }
     this.showTime =this.showTime.bind(this)  
     this.showDate =  this.showDate.bind(this) 
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleNext = this.handleNext.bind(this)
     this.handleAuth = this.handleAuth.bind(this)
     this.getCurrentDate = this.getCurrentDate.bind(this)
    
-    this.handleAuth()
+   // this.handleAuth()
   }
 
 
@@ -56,49 +51,30 @@ Firebase.auth().onAuthStateChanged((user) => {
 })
   }
 
-    handleSubmit= async ()=>{
+    handleNext= async ()=>{
       //send order to firebase
       var details='';
       (this.state.checkbox1)? details += 'Plastic Bottles, ': '';
       (this.state.checkbox2)? details += 'Cardboard Box, ': '';
       (this.state.checkbox3)? details += 'Paper, ': '';
       (this.state.checkbox4)? details += 'Food': '';
-      Firebase.database()
-      .ref(`Users/${userUID}/pending`)
-      .push({
-          location: this.props.navigation.getParam('location'),
-          details: details,    
-          date:this.state.date,
-          time: this.state.time,
-          phoneNumber: this.state.phoneNumber,
-          comment: this.state.comment,
-        
-      })
-      //send an sms
-      var message = `New Trash PickUp Request. Location: ${this.props.navigation.getParam('location')}, details: ${details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
-      await fetch("http://bf8fb1c5.ngrok.io/?message="+message).then((res)=>{
-      console.log(res);
-      if(res.status == 200){
-        //this.setState({sucess: true})
-        console.log("success")
-      }
-    }).catch((err)=>{
-      console.log("err"+err);
-    });
-  
-
-      this.props.navigation.navigate('Order',{userUID:userUID,title:'Pending Trash PickUps'})
+     
+      
+      this.props.navigation.navigate('Details2',{time:this.state.time,date:this.state.date,details:details,userUID:this.state.userUID})
       
     }
   showTime =  async() =>{
     try {
-      const {action, hour, minute} = await TimePickerAndroid.open({
+      let {action, hour, minute} = await TimePickerAndroid.open({
         hour: 14,
         minute: 0,
         is24Hour: false, // Will display '2 PM'
       });
       if (action !== TimePickerAndroid.dismissedAction) {
         // Selected hour (0-23), minute (0-59)
+        if(minute<10){
+          minute = '0' + minute
+        }
         this.setState({
           time : `${hour}:${minute} hrs`
         })
@@ -143,12 +119,14 @@ if (mm < 10) {
 if(mins < 10){
   mins = '0' + mins
 }
+console.log(mins)
 today = mm + '/' + dd + '/' + yyyy;
 this.setState({
   date : today
 })
+var time = hr+':'+mins + ' hrs'
 this.setState({
-  time : `${hr}:${mins}`
+  time : time
 })
   }
  componentWillMount(){
@@ -158,6 +136,11 @@ this.setState({
     return (
       
       <ScrollView>
+        <Header
+  leftComponent={{ icon: 'menu', color: '#fff' }}
+  centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+  // rightComponent={{ icon: 'home', color: '#fff' }}
+/>
       <View style={styles.container}>
           <View>  
               <Text style={styles.heading}  h5>When would you like your trash picked up</Text>
@@ -176,25 +159,24 @@ this.setState({
         
               
            
-   
-         
+        
           <CheckBox title='Cardboard Box' checked={this.state.checkbox2} onPress={()=>this.setState({checkbox2:!this.state.checkbox2})} />
-          
-           
-         
+     
           <CheckBox title='Paper' checked={this.state.checkbox3} onPress={()=>this.setState({checkbox3:!this.state.checkbox3})} />          
           <CheckBox title='Food' checked={this.state.checkbox4} onPress={()=>this.setState({checkbox4:!this.state.checkbox4})} />      
-           
-               <Text style={styles.heading}>Contact Number</Text>         
-              <Input id='phoneNumber' value={this.state.phoneNumber} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder="contact number" />       
-            <TextInput value={this.state.comment}  editable = {true}
-         multiline={true} onChangeText={(comment) => this.setState({comment})}
-         numberOfLines={4} placeholder="Notes" />
-       
           
      </View>
+     <View style={{backgroundColor:'ecf0f1',height:50}}></View>
+     {/* <KeyboardAvoidingView behavior="padding" style={styles.form}>
+
+     <Text style={styles.heading}>Contact Number</Text>         
+              <TextInput id='phoneNumber' value={this.state.phoneNumber} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder="0967 999 000" />       
+            <TextInput style={{height:200}} value={this.state.comment}  editable = {true}
+         multiline={true} onChangeText={(comment) => this.setState({comment})}
+         numberOfLines={4} placeholder="Notes" />
+     </KeyboardAvoidingView> */}
         <View style={styles.button}>
-          <Button title='CONFIRM' onPress={()=>this.handleSubmit()} />
+          <Button title='NEXT' onPress={()=>this.handleNext()} />
         </View>
        
       </View>
@@ -206,11 +188,15 @@ this.setState({
 
 const styles = {
   container:{
-    padding:20,
-   //  backgroundColor: '008000'
+    flex: 1,
+    backgroundColor: '#ecf0f1',
+    paddingLeft : 15,
+    paddingRight: 15,
+    paddingTop: 20
   },
   heading:{
     fontSize:20,
+    paddingTop:10,
     paddingBottom:5
   },
   text:{
@@ -222,8 +208,12 @@ const styles = {
 
   },
   button:{
-    flexDirection: "row",
-    justifyContent: "center",
-    paddingTop:20
+    flex:1,
+    paddingTop:15,
+    marginBottom:80
+  },
+  form: {
+    flex: 1,
+    justifyContent: 'space-between',
   }
 }
