@@ -80,7 +80,7 @@ export default class PendingOrders extends React.Component{
             <ScrollView>
                  <Header
   leftComponent={{ icon: 'menu', color: '#fff' }}
-  centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+  centerComponent={{ text: 'Orders', style: { color: '#fff' } }}
   // rightComponent={{ icon: 'home', color: '#fff' }}
 />
                   <ButtonGroup

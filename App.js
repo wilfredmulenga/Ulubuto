@@ -40,14 +40,20 @@ import Demo from './components/Demo'
 // }));
 
 const MyDrawerNavigator = createDrawerNavigator({
- 
-  Orders : {
-    screen : Orders
+  Home: {
+    screen: HomeScreen,
   },
 
   Details: {
     screen: Details,
   },
+ 
+  
+  Orders : {
+    screen : Orders
+  },
+
+  
   Details2: {
     screen: Details2,
   },

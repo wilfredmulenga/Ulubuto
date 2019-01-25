@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { Button, View, TextInput,Text, KeyboardAvoidingView} from 'react-native';
-import {  Header } from 'react-native-elements';
+import {  Header, Icon } from 'react-native-elements';
+import Firebase from './config/firebase'
 
 export default class Details extends Component {
-    static navigationOptions = ({ navigation }) => {
-      return {
-        title: navigation.getParam('title'),
-      };
-    };
+  
     constructor(props){
      super(props)
      this.state = {
@@ -18,30 +15,30 @@ export default class Details extends Component {
          comment : '',
          userUID : this.props.navigation.state.params.userUID
      }
-       
+     this.handleSubmit = this.handleSubmit.bind(this)
+     console.log(this.state.userUID)
     }
     
-    handleNext= async ()=>{
+    
+    handleSubmit=  ()=>{
         //send order to firebase
-        var details='';
-        (this.state.checkbox1)? details += 'Plastic Bottles, ': '';
-        (this.state.checkbox2)? details += 'Cardboard Box, ': '';
-        (this.state.checkbox3)? details += 'Paper, ': '';
-        (this.state.checkbox4)? details += 'Food': '';
+        console.log("hello")
         Firebase.database()
-        .ref(`Users/${userUID}/pending`)
+        .ref(`Users/${this.state.userUID}`)
         .push({
-            location: this.props.navigation.getParam('location'),
-            details: details,    
+            location: "location",
+            //this.props.navigation.getParam('location'),
+            details: this.state.details,    
             date:this.state.date,
             time: this.state.time,
             phoneNumber: this.state.phoneNumber,
             comment: this.state.comment,
+            status: 'pending'
           
         })
         //send an sms
-        var message = `New Trash PickUp Request. Location: ${this.props.navigation.getParam('location')}, details: ${details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
-        await fetch("http://bf8fb1c5.ngrok.io/?message="+message).then((res)=>{
+        var message = `New Trash PickUp Request. Location: ${this.props.navigation.getParam('location')}, details: ${this.state.details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
+         fetch("http://4ee906e8.ngrok.io/?message="+message+"&phoneNumber="+this.state.phoneNumber).then((res)=>{
         console.log(res);
         if(res.status == 200){
           //this.setState({sucess: true})
@@ -51,19 +48,23 @@ export default class Details extends Component {
         console.log("err"+err);
       });
     
-  
-        this.props.navigation.navigate('Order',{userUID:userUID,title:'Pending Trash PickUps'})
+        //go to Orders
+        this.props.navigation.navigate('Orders')
         
       }
 
     render(){
         return(
             <View style={{flex:1}}>
-                     <Header
-  leftComponent={{ icon: 'menu', color: '#fff' }}
-  centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-  // rightComponent={{ icon: 'home', color: '#fff' }}
-/>
+                      <Header
+            leftComponent= {<Icon
+              name='menu'
+              type='material'
+              color='#fff'
+              onPress={() => this.props.navigation.openDrawer()} />}
+            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+            // rightComponent={{ icon: 'home', color: '#fff' }}
+          />
 <View style={styles.container}>
         
                 <View style={{flex:1}}>
@@ -75,7 +76,7 @@ export default class Details extends Component {
          numberOfLines={4} placeholder="I have assorted my trash..." />
                 </View>
                 <KeyboardAvoidingView behavior="padding" style={styles.form}><View style={styles.button}> 
-                    <Button onPress={console.log('')} title='CONFIRM'></Button>
+                    <Button onPress={this.handleSubmit} title='CONFIRM'></Button>
                 </View></KeyboardAvoidingView>
                 
           
