@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Divider, CheckBox,Header, Icon } from 'react-native-elements'
+import {Card, CheckBox, Header} from 'react-native-elements'
 import {TimePickerAndroid, DatePickerAndroid, Button, ScrollView, View,Text} from 'react-native'
 import Firebase from './config/firebase'
 
@@ -136,15 +136,11 @@ this.setState({
     return (
       
       <ScrollView>
-       <Header
-            leftComponent= {<Icon
-              name='menu'
-              type='material'
-              color='#fff'
-              onPress={() => this.props.navigation.openDrawer()} />}
-            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-            // rightComponent={{ icon: 'home', color: '#fff' }}
-          />
+        <Header
+  leftComponent={{ icon: 'menu', color: '#fff' }}
+  centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+  // rightComponent={{ icon: 'home', color: '#fff' }}
+/>
       <View style={styles.container}>
           <View>  
               <Text style={styles.heading}  h5>When would you like your trash picked up</Text>
@@ -154,7 +150,7 @@ this.setState({
           <Text style={styles.text} onPress={()=>this.showTime()}>Time: {this.state.time}</Text>
         
      
-          <Divider style={{ backgroundColor: 'grey' }} />
+         
  
              <Text style={styles.heading}>Select the type of trash you have</Text>
              

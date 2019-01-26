@@ -1,22 +1,19 @@
 import React from 'react';
 import { MapView} from 'expo';
 import { GOOGLE_MAPS_KEY } from 'react-native-dotenv'
-import { View, Alert, Dimensions } from 'react-native'
+import { View, Alert } from 'react-native'
 import { Location, Permissions, Font, AppLoading } from 'expo'
 
-let { width, height } = Dimensions.get('window');
-const ASPECT_RATIO = width / height;
-const LONGITUDE_DELTA = 0.0922 * ASPECT_RATIO;
 const deltas = {
   latitudeDelta: 0.0922,
-  longitudeDelta: LONGITUDE_DELTA
+  longitudeDelta: 0.0021
 };
 
 const initialRegion = {
   latitude: -15.3875,
   longitude: 28.3228,
   latitudeDelta: 0.0922,
-  longitudeDelta: LONGITUDE_DELTA
+  longitudeDelta: 0.0021
 };
 
 class Map extends React.Component {
@@ -42,7 +39,7 @@ async componentWillMount() {
     Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
   });
  
-    this.getLocationAsync();
+   // this.getLocationAsync();
   }
 
 getLocationAsync = async () => {
