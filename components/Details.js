@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, CheckBox, Header} from 'react-native-elements'
+import {Card, CheckBox, Header, Icon} from 'react-native-elements'
 import {TimePickerAndroid, DatePickerAndroid, Button, ScrollView, View,Text} from 'react-native'
 import Firebase from './config/firebase'
 
@@ -17,7 +17,7 @@ export default class Details extends Component {
       checkbox2: false,
       checkbox3: false,
       checkbox4: false,
-     
+      location : this.props.navigation.getParam('location'),
       userUID: 'uOuwqfL9oJbsCex5JYSxAaoDeCz1',
    
     }
@@ -26,7 +26,7 @@ export default class Details extends Component {
     this.handleNext = this.handleNext.bind(this)
     this.handleAuth = this.handleAuth.bind(this)
     this.getCurrentDate = this.getCurrentDate.bind(this)
-   
+    console.log(this.state.location)
    // this.handleAuth()
   }
 
@@ -60,7 +60,7 @@ Firebase.auth().onAuthStateChanged((user) => {
       (this.state.checkbox4)? details += 'Food': '';
      
       
-      this.props.navigation.navigate('Details2',{time:this.state.time,date:this.state.date,details:details,userUID:this.state.userUID})
+      this.props.navigation.navigate('Details2',{time:this.state.time,date:this.state.date,details:details,userUID:this.state.userUID, location: this.state.location})
       
     }
   showTime =  async() =>{
@@ -136,11 +136,15 @@ this.setState({
     return (
       
       <ScrollView>
-        <Header
-  leftComponent={{ icon: 'menu', color: '#fff' }}
-  centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-  // rightComponent={{ icon: 'home', color: '#fff' }}
-/>
+        <Header backgroundColor='#008000'
+            leftComponent= {<Icon
+              name='menu'
+              type='material'
+              color='#fff'
+              onPress={() => this.props.navigation.openDrawer()} />}
+            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+            // rightComponent={{ icon: 'home', color: '#fff' }}
+          />
       <View style={styles.container}>
           <View>  
               <Text style={styles.heading}  h5>When would you like your trash picked up</Text>
@@ -176,7 +180,7 @@ this.setState({
          numberOfLines={4} placeholder="Notes" />
      </KeyboardAvoidingView> */}
         <View style={styles.button}>
-          <Button title='NEXT' onPress={()=>this.handleNext()} />
+          <Button color='#008000' title='NEXT' onPress={()=>this.handleNext()} />
         </View>
        
       </View>

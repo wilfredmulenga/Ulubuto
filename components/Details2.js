@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, View, TextInput,Text, KeyboardAvoidingView} from 'react-native';
-import {  Header } from 'react-native-elements';
+import {  Header, Icon } from 'react-native-elements';
+import firebase from './config/firebase'
 
 export default class Details extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -16,32 +17,28 @@ export default class Details extends Component {
          details: this.props.navigation.state.params.details,
          phoneNumber:'',
          comment : '',
+         location : this.props.navigation.getParam('location'),
          userUID : this.props.navigation.state.params.userUID
      }
-       
+       this.handleSubmit = this.handleSubmit.bind(this)
     }
     
-    handleNext= async ()=>{
+    handleSubmit= async ()=>{
         //send order to firebase
-        var details='';
-        (this.state.checkbox1)? details += 'Plastic Bottles, ': '';
-        (this.state.checkbox2)? details += 'Cardboard Box, ': '';
-        (this.state.checkbox3)? details += 'Paper, ': '';
-        (this.state.checkbox4)? details += 'Food': '';
-        Firebase.database()
-        .ref(`Users/${userUID}/pending`)
+        firebase.database()
+        .ref(`Users/${this.state.userUID}`)
         .push({
-            location: this.props.navigation.getParam('location'),
-            details: details,    
+            location: this.state.location,
+            details: this.state.details,    
             date:this.state.date,
             time: this.state.time,
             phoneNumber: this.state.phoneNumber,
             comment: this.state.comment,
-          
+            status: 'pending'
         })
         //send an sms
-        var message = `New Trash PickUp Request. Location: ${this.props.navigation.getParam('location')}, details: ${details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
-        await fetch("http://bf8fb1c5.ngrok.io/?message="+message).then((res)=>{
+        var message = `New Trash PickUp Request. Location: ${this.state.location}, details: ${this.state.details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
+        await fetch("https://infinite-inlet-68633.herokuapp.com/?message="+message).then((res)=>{
         console.log(res);
         if(res.status == 200){
           //this.setState({sucess: true})
@@ -52,18 +49,22 @@ export default class Details extends Component {
       });
     
   
-        this.props.navigation.navigate('Order',{userUID:userUID,title:'Pending Trash PickUps'})
+        this.props.navigation.navigate('Orders',{userUID:this.state.userUID,title:'Pending Trash PickUps'})
         
       }
 
     render(){
         return(
             <View style={{flex:1}}>
-                     <Header
-  leftComponent={{ icon: 'menu', color: '#fff' }}
-  centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-  // rightComponent={{ icon: 'home', color: '#fff' }}
-/>
+                    <Header backgroundColor='#008000'
+            leftComponent= {<Icon
+              name='menu'
+              type='material'
+              color='#fff'
+              onPress={() => this.props.navigation.openDrawer()} />}
+            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+            // rightComponent={{ icon: 'home', color: '#fff' }}
+          />
 <View style={styles.container}>
         
                 <View style={{flex:1}}>
@@ -75,7 +76,7 @@ export default class Details extends Component {
          numberOfLines={4} placeholder="I have assorted my trash..." />
                 </View>
                 <KeyboardAvoidingView behavior="padding" style={styles.form}><View style={styles.button}> 
-                    <Button onPress={console.log('')} title='CONFIRM'></Button>
+                    <Button color='#008000' onPress={this.handleSubmit} title='CONFIRM'></Button>
                 </View></KeyboardAvoidingView>
                 
           

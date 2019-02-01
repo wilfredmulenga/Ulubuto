@@ -1,8 +1,7 @@
 import React from 'react'
-import {Container, Text, Card , Body, CardItem } from 'native-base'
 import Firebase from './config/firebase'
 import { ScrollView } from 'react-native'
-import { ButtonGroup,Header  } from 'react-native-elements';
+import { ButtonGroup, Card, Text, Header, Icon  } from 'react-native-elements';
 
 var element = []
 var listOfOrders
@@ -78,12 +77,17 @@ export default class PendingOrders extends React.Component{
         console.log(selectedIndex)
         return(
             <ScrollView>
-                 <Header
-  leftComponent={{ icon: 'menu', color: '#fff' }}
-  centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-  // rightComponent={{ icon: 'home', color: '#fff' }}
-/>
-                  <ButtonGroup
+                  <Header backgroundColor='#008000'
+            leftComponent= {<Icon
+              name='menu'
+              type='material'
+              color='#fff'
+              onPress={() => this.props.navigation.openDrawer()} />}
+            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+            // rightComponent={{ icon: 'home', color: '#fff' }}
+          />
+                  <ButtonGroup 
+                  underlayColor="#008000"
       onPress={this.updateIndex}
       selectedIndex={selectedIndex}
       buttons={buttons}
@@ -94,14 +98,14 @@ export default class PendingOrders extends React.Component{
                 {/* <CardItem header >
                 <Text>Order #</Text>
                 </CardItem> */}
-                <CardItem>
-                <Body>
+             
+           
                     <Text>Date: {element.date}</Text>
                     <Text>Time: {element.time}</Text>
                     <Text>Details: {element.details}</Text>
                     <Text>Cost: K25</Text>
-                </Body>
-                </CardItem>
+              
+               
             </Card>
                 ):null}
                 {(selectedIndex===0)? this.state.completedOrders.map((element,i)=>
@@ -109,14 +113,13 @@ export default class PendingOrders extends React.Component{
                 {/* <CardItem header >
                 <Text>Order #</Text>
                 </CardItem> */}
-                <CardItem>
-                <Body>
+              
+          
                     <Text>Date: {element.date}</Text>
                     <Text>Time: {element.time}</Text>
                     <Text>Details: {element.details}</Text>
                     <Text>Cost: K25</Text>
-                </Body>
-                </CardItem>
+              
             </Card>
                 ):null}
             </ScrollView>
