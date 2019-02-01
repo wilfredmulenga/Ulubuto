@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, View, TextInput,Text, KeyboardAvoidingView} from 'react-native';
 import {  Header, Icon } from 'react-native-elements';
 import firebase from './config/firebase'
+import Loader from './Loader'
 
 export default class Details extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -18,13 +19,12 @@ export default class Details extends Component {
          phoneNumber:'',
          comment : '',
          location : this.props.navigation.getParam('location'),
-         userUID : this.props.navigation.state.params.userUID
+         userUID : this.props.navigation.state.params.userUID,
+         loading : false
      }
        this.handleSubmit = this.handleSubmit.bind(this)
     }
-    
-    handleSubmit= async ()=>{
-        //send order to firebase
+    handleSMS = async ()=>{
         firebase.database()
         .ref(`Users/${this.state.userUID}`)
         .push({
@@ -48,8 +48,18 @@ export default class Details extends Component {
         console.log("err"+err);
       });
     
-  
-        this.props.navigation.navigate('Orders',{userUID:this.state.userUID,title:'Pending Trash PickUps'})
+    }
+    handleSubmit= async ()=>{
+        //send order to firebase
+       
+        this.setState({
+            loading : true
+        })
+      await this.handleSMS
+      this.setState({
+        loading : false
+    })
+      this.props.navigation.navigate('Orders',{userUID:this.state.userUID,title:'Pending Trash PickUps'})
         
       }
 
@@ -66,7 +76,8 @@ export default class Details extends Component {
             // rightComponent={{ icon: 'home', color: '#fff' }}
           />
 <View style={styles.container}>
-        
+<Loader
+          loading={this.state.loading} />
                 <View style={{flex:1}}>
                 <Text style={styles.heading}>Contact Number</Text>         
               <TextInput id='phoneNumber' value={this.state.phoneNumber} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder="0967 999 000" /> 

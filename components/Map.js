@@ -3,6 +3,7 @@ import { MapView} from 'expo';
 import { GOOGLE_MAPS_KEY } from 'react-native-dotenv'
 import { View, Alert, Dimensions, Text, StyleSheet, Image, SafeAreaView } from 'react-native'
 import { Location, Permissions, Font, AppLoading } from 'expo'
+import marker from '../assets/icons8-place-marker-48.png'
 
 const deltas = {
   latitudeDelta: 0.005,
@@ -42,7 +43,7 @@ class Map extends React.Component {
     }
     this.locationPrompt = this.locationPrompt.bind(this)
     this.onRegionChange = this.onRegionChange.bind(this)
-    this.onRegionChangeComplete = this.onRegionChangeComplete(this)
+    this.getLocationAsync();
     
 }
 
@@ -50,19 +51,27 @@ onRegionChange(region) {
   this.setState({
     region : region
   })
+  console.log('onRegionChange',region)
+  fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+ region.latitude + ',' + region.longitude + '&key=' + GOOGLE_MAPS_KEY )
+.then((response) => response.json())
+.then((responseJson) => {
+    console.log("address", JSON.stringify(responseJson.results[1].formatted_address));
+    this.setState({
+      location : JSON.stringify(responseJson.results[1].formatted_address)
+    }) 
+    return this.state.location
+}).then((location)=>{
+ this.props.handleChange(location)
+})
 }
 
-onRegionChangeComplete(region){
-  console.log('onRegionChangeComplete',region)
-}
+
 
 locationPrompt = ()=>{
   Alert.alert('Please turn on location services')
 }
-async componentWillMount() {
- 
-    this.getLocationAsync();
-  }
+
+
 
 getLocationAsync = async () => {
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -92,25 +101,12 @@ getLocationAsync = async () => {
     ...deltas
   };
  
-  console.log(region)
-//   fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+ region.latitude + ',' + region.longitude + '&key=' + GOOGLE_MAPS_KEY )
-//   .then((response) => response.json())
-//   .then((responseJson) => {
-//       console.log("address", JSON.stringify(responseJson.results[1].formatted_address));
-//       this.setState({
-//         location : JSON.stringify(responseJson.results[1].formatted_address)
-//       }) 
-//       return this.state.location
-// }).then((location)=>{
-//    this.props.handleChange(location)
-// })
+  
+
   
   await this.setState({region:region ,  });
  
-  await this.setState({
-      show : true
-  })
-  
+   
 
 }
 
@@ -133,19 +129,19 @@ getLocationAsync = async () => {
         moveOnMarkerPress={false}
       
       >
-       
+{/*        
       <MapView.Marker coordinate={this.state.region}
         //onPress={(press)=>console.log(press)}
   image={require('../assets/icons8-place-marker-48.png')}
       draggable
-      />
+      /> */}
       </MapView>
-      {/* <View style={styles.markerFixed}>
+      <View style={styles.markerFixed}>
           <Image style={styles.marker} source={marker} />
-        </View> */}
-        <SafeAreaView style={styles.footer}>
+        </View>
+        {/* <SafeAreaView style={styles.footer}>
           <Text style={styles.region}>{JSON.stringify(this.state.region, null, 2)}</Text>
-        </SafeAreaView>
+        </SafeAreaView> */}
         </View>  
     );
   }
@@ -156,11 +152,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   markerFixed: {
-    left: '50%',
-    marginLeft: -24,
-    marginTop: -48,
-    position: 'absolute',
-    top: '50%'
+    position: 'absolute',//use absolute position to show button on top of the map
+    top: '50%', //for center align
+    alignSelf: 'center' //for align to right
   },
   marker: {
     height: 48,
