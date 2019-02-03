@@ -13,13 +13,34 @@ import Demo from './components/Demo'
 import Profile from './components/Profile'
 import Authentication from './components/Authentication'
 import Auth from './components/Auth'
+import firebase from './components/config/firebase'
 
 
  class App extends React.Component {
   constructor(props){
     super(props)  
-   
+    this.state={
+      come : ''
+    }
+    this.HandleAuthentication = this.HandleAuthentication.bind(this)
+    this.HandleAuthentication()
   }
+  
+
+  HandleAuthentication = ()=>{
+    console.log('auth')
+    firebase.auth().signInAnonymously().catch(function(error){
+        console.log(error.code,error.message)
+    })
+    firebase.auth().onAuthStateChanged((user)=>{
+        if(user.phoneNumber ===null){
+          console.log(this.props)
+        }
+       
+    })
+}
+
+
  
     
   render() {
@@ -44,13 +65,14 @@ import Auth from './components/Auth'
 
 const MyDrawerNavigator = createDrawerNavigator({
   
+  Authentication : {
+    screen : Authentication
+  },
   
   Home: {
     screen: HomeScreen,
   },
-  // Authentication : {
-  //   screen : Authentication
-  // },
+  
   
   Auth : {
     screen : Auth

@@ -101,13 +101,9 @@ getLocationAsync = async () => {
     ...deltas
   };
  
-  
-
-  
+ 
   await this.setState({region:region ,  });
  
-   
-
 }
 
    
@@ -120,7 +116,7 @@ getLocationAsync = async () => {
       initialRegion={{ ...initialRegion, ...deltas }}
       showsUserLocation
      // onRegionChange={this.onRegionChange}
-      onRegionChangeComplete={this.onRegionChange}
+     // onRegionChangeComplete={this.onRegionChange}
       minZoomLevel = {0}
       maxZoomLevel = {16}
       loadingEnabled = {true}
