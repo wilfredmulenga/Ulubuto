@@ -3,6 +3,7 @@ import { Button, View, TextInput,Text, KeyboardAvoidingView} from 'react-native'
 import {  Header, Icon } from 'react-native-elements';
 import firebase from './config/firebase'
 import Loader from './Loader'
+import TabHeader from './TabHeader'
 
 export default class Details extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -25,7 +26,7 @@ export default class Details extends Component {
        this.handleSubmit = this.handleSubmit.bind(this)
     }
     handleSMS = async ()=>{
-        firebase.database()
+       await firebase.database()
         .ref(`Users/${this.state.userUID}`)
         .push({
             location: this.state.location,
@@ -43,10 +44,15 @@ export default class Details extends Component {
         if(res.status == 200){
           //this.setState({sucess: true})
           console.log("success")
+          this.setState({
+              loading: true
+          })
         }
       }).catch((err)=>{
         console.log("err"+err);
-      });
+      }).then(()=>{
+        this.props.navigation.navigate('Orders',{userUID:this.state.userUID,title:'Pending Trash PickUps'})
+      })
     
     }
     handleSubmit= async ()=>{
@@ -59,23 +65,25 @@ export default class Details extends Component {
       this.setState({
         loading : false
     })
-      this.props.navigation.navigate('Orders',{userUID:this.state.userUID,title:'Pending Trash PickUps'})
+     
         
       }
 
     render(){
         return(
             <View style={{flex:1}}>
-                    <Header backgroundColor='#008000'
-            leftComponent= {<Icon
-              name='menu'
-              type='material'
-              color='#fff'
-              onPress={() => this.props.navigation.openDrawer()} />}
-            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-            // rightComponent={{ icon: 'home', color: '#fff' }}
-          />
-<View style={styles.container}>
+                   <Header backgroundColor='#008000'
+leftComponent= {<Icon
+  
+  name='menu'
+  type='material'
+  color='#fff'
+  size={32}
+ 
+  onPress={() => this.props.navigation.openDrawer()} />}
+centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+// rightComponent={{ icon: 'home', color: '#fff' }}
+/>{(this.state.loading)?<Loading/>:<View style={styles.container}>
 <Loader
           loading={this.state.loading} />
                 <View style={{flex:1}}>
@@ -87,12 +95,13 @@ export default class Details extends Component {
          numberOfLines={4} placeholder="I have assorted my trash..." />
                 </View>
                 <KeyboardAvoidingView behavior="padding" style={styles.form}><View style={styles.button}> 
-                    <Button color='#008000' onPress={this.handleSubmit} title='CONFIRM'></Button>
+                    <Button color='#008000' onPress={this.handleSMS} title='CONFIRM'></Button>
                 </View></KeyboardAvoidingView>
                 
           
             </View>
-            </View>
+            }
+</View>
            
         )
     }

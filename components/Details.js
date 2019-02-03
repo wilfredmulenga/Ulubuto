@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Card, CheckBox, Header, Icon} from 'react-native-elements'
 import {TimePickerAndroid, DatePickerAndroid, Button, ScrollView, View,Text} from 'react-native'
 import Firebase from './config/firebase'
+import TabHeader from './TabHeader'
 
 
  
@@ -89,12 +90,12 @@ Firebase.auth().onAuthStateChanged((user) => {
       const {action, year, month, day} = await DatePickerAndroid.open({
         // Use `new Date()` for current date.
         // May 25 2020. Month 0 is January.
-        date: new Date(2019, 1, 1)
+        date: new Date()
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
         this.setState({
-          date: `${day}/${month}/${year}`
+          date: `${day}/${month+1}/${year}`
         })
       }
     } catch ({code, message}) {
@@ -119,7 +120,6 @@ if (mm < 10) {
 if(mins < 10){
   mins = '0' + mins
 }
-console.log(mins)
 today = mm + '/' + dd + '/' + yyyy;
 this.setState({
   date : today
@@ -137,14 +137,17 @@ this.setState({
       
       <ScrollView>
         <Header backgroundColor='#008000'
-            leftComponent= {<Icon
-              name='menu'
-              type='material'
-              color='#fff'
-              onPress={() => this.props.navigation.openDrawer()} />}
-            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-            // rightComponent={{ icon: 'home', color: '#fff' }}
-          />
+leftComponent= {<Icon
+  
+  name='menu'
+  type='material'
+  color='#fff'
+  size={32}
+ 
+  onPress={() => this.props.navigation.openDrawer()} />}
+centerComponent={{ text: 'Details', style: { color: '#fff' } }}
+// rightComponent={{ icon: 'home', color: '#fff' }}
+/>
       <View style={styles.container}>
           <View>  
               <Text style={styles.heading}  h5>When would you like your trash picked up</Text>
@@ -204,8 +207,15 @@ const styles = {
     paddingBottom:5
   },
   text:{
+    backgroundColor: '#fafafa',
     paddingTop:10,
     paddingBottom:10,
+    marginBottom:13,
+    marginLeft:10,
+    marginRight:10,
+    paddingLeft:10,
+    paddingRight:10,
+    fontWeight:'bold',
     fontSize:16
   },
   textInput:{

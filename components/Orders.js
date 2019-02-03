@@ -2,6 +2,8 @@ import React from 'react'
 import Firebase from './config/firebase'
 import { ScrollView } from 'react-native'
 import { ButtonGroup, Card, Text, Header, Icon  } from 'react-native-elements';
+import TabHeader from './TabHeader'
+import Loading from './Loading'
 
 var element = []
 var listOfOrders
@@ -15,7 +17,7 @@ export default class PendingOrders extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            userUID: 'uOuwqfL9oJbsCex5JYSxAaoDeCz1',
+            userUID: 'RDN8nzjqLahu7Q06l8Dlao4gsX02',
             order : null,
             pendingOrders : [],
             completedOrders : [],
@@ -68,24 +70,27 @@ export default class PendingOrders extends React.Component{
                   element = []
               }
             })
-          console.log(this.state.order)
+          
     }
   
     render(){
         const buttons = [ 'Completed','Pending']
         const { selectedIndex } = this.state
-        console.log(selectedIndex)
+       
         return(
             <ScrollView>
-                  <Header backgroundColor='#008000'
-            leftComponent= {<Icon
-              name='menu'
-              type='material'
-              color='#fff'
-              onPress={() => this.props.navigation.openDrawer()} />}
-            centerComponent={{ text: 'Details', style: { color: '#fff' } }}
-            // rightComponent={{ icon: 'home', color: '#fff' }}
-          />
+                   <Header backgroundColor='#008000'
+leftComponent= {<Icon
+  
+  name='menu'
+  type='material'
+  color='#fff'
+  size={32}
+ 
+  onPress={() => this.props.navigation.openDrawer()} />}
+centerComponent={{ text: 'Orders', style: { color: '#fff' } }}
+// rightComponent={{ icon: 'home', color: '#fff' }}
+/>
                   <ButtonGroup 
                   underlayColor="#008000"
       onPress={this.updateIndex}
@@ -93,7 +98,7 @@ export default class PendingOrders extends React.Component{
       buttons={buttons}
       containerStyle={{height: 50}}
     />
-                {(selectedIndex===1)? this.state.pendingOrders.map((element,i)=>
+                {(listOfOrders===undefined) ? <Loading/> :(selectedIndex===1)? this.state.pendingOrders.map((element,i)=>
                 <Card key={i}>
                 {/* <CardItem header >
                 <Text>Order #</Text>

@@ -33,8 +33,8 @@ import firebase from './components/config/firebase'
         console.log(error.code,error.message)
     })
     firebase.auth().onAuthStateChanged((user)=>{
-        if(user.phoneNumber ===null){
-          console.log(this.props)
+        if(user !==null){
+          console.log(user.uid)
         }
        
     })
@@ -65,14 +65,15 @@ import firebase from './components/config/firebase'
 
 const MyDrawerNavigator = createDrawerNavigator({
   
-  Authentication : {
-    screen : Authentication
-  },
+  
   
   Home: {
     screen: HomeScreen,
   },
   
+  Authentication : {
+    screen : Authentication
+  },
   
   Auth : {
     screen : Auth

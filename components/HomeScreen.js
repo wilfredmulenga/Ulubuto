@@ -2,6 +2,7 @@ import React from 'react';
 import Map from './Map'
 import { Header, Icon } from 'react-native-elements'
 import {View, Alert, Button, TouchableOpacity } from 'react-native'
+import TabHeader from './TabHeader'
 
  
 
@@ -48,17 +49,18 @@ class HomeScreen extends React.Component {
            
                 return(
                   <View style={{flex:1}}>
-                   <Header backgroundColor='#008000'
-            leftComponent= {<Icon
-              
-              name='menu'
-              type='material'
-              color='#fff'
-             
-              onPress={() => this.props.navigation.openDrawer()} />}
-            centerComponent={{ text: 'Trash PickUp', style: { color: '#fff' } }}
-            // rightComponent={{ icon: 'home', color: '#fff' }}
-          />
+                  <Header backgroundColor='#008000'
+leftComponent= {<Icon
+  
+  name='menu'
+  type='material'
+  color='#fff'
+  size={32}
+ 
+  onPress={() => this.props.navigation.openDrawer()} />}
+centerComponent={{ text: 'Trash PickUp', style: { color: '#fff' } }}
+// rightComponent={{ icon: 'home', color: '#fff' }}
+/>
                     <Map location={this.state.location} handleChange={this.handleChange} />
                     <View
         style={{

@@ -47,28 +47,30 @@ class Map extends React.Component {
     
 }
 
+
 onRegionChange(region) {
-  this.setState({
-    region : region
-  })
+  // this.setState({
+  //   region : region
+  // })
   console.log('onRegionChange',region)
   fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+ region.latitude + ',' + region.longitude + '&key=' + GOOGLE_MAPS_KEY )
 .then((response) => response.json())
 .then((responseJson) => {
     console.log("address", JSON.stringify(responseJson.results[1].formatted_address));
-    this.setState({
-      location : JSON.stringify(responseJson.results[1].formatted_address)
-    }) 
+    // this.setState({
+    //   location : JSON.stringify(responseJson.results[1].formatted_address)
+    // }) 
     return this.state.location
 }).then((location)=>{
  this.props.handleChange(location)
 })
 }
-
+  
 
 
 locationPrompt = ()=>{
-  Alert.alert('Please turn on location services')
+  
+  console.log("location off")
 }
 
 
@@ -78,8 +80,9 @@ getLocationAsync = async () => {
   if(!status.locationServicesEnabled){
     this.setState({
       locationStatus:false
-      
     })
+    this.locationPrompt()
+   
   }else{
     this.setState({
       locationStatus:true
@@ -110,13 +113,13 @@ getLocationAsync = async () => {
   render() {
     return ( 
         <View style={styles.map}>
+       
            <MapView
       style={{flex:1}}
-      region={this.state.region}
       initialRegion={{ ...initialRegion, ...deltas }}
       showsUserLocation
      // onRegionChange={this.onRegionChange}
-     // onRegionChangeComplete={this.onRegionChange}
+      onRegionChangeComplete={this.onRegionChange}
       minZoomLevel = {0}
       maxZoomLevel = {16}
       loadingEnabled = {true}

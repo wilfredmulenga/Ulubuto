@@ -8,12 +8,13 @@ const patchPostMessageFunction = function () {
 
     var patchedPostMessage = function (message, targetOrigin, transfer) {
         originalPostMessage(message, targetOrigin, transfer);
+       
     };
 
     patchedPostMessage.toString = function () {
         return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
     };
-    console.log(patchedPostMessage)
+
     window.postMessage = patchedPostMessage;
 };
 
@@ -37,8 +38,8 @@ export default class WebViewTest extends Component {
     onMessage(m) {
         var data=getObject(m.nativeEvent.data);
         if (data && data.loggedIn)
-            alert('Hey you have logged in')
-            console.log(m)
+           // alert('Hey you have logged in')
+           
             this.props.navigation.navigate('Home') 
     }
 
