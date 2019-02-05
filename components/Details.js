@@ -19,7 +19,7 @@ export default class Details extends Component {
       checkbox3: false,
       checkbox4: false,
       location : this.props.navigation.getParam('location'),
-      userUID: 'uOuwqfL9oJbsCex5JYSxAaoDeCz1',
+      userUID: 'RDN8nzjqLahu7Q06l8Dlao4gsX02',
    
     }
     this.showTime =this.showTime.bind(this)  

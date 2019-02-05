@@ -3,7 +3,8 @@ import {
   StyleSheet,
   View,
   Modal,
-  ActivityIndicator
+  ActivityIndicator,
+  Text
 } from 'react-native';
 
 const Loader = props => {
@@ -20,8 +21,8 @@ const Loader = props => {
       onRequestClose={() => {console.log('close modal')}}>
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>
-          <ActivityIndicator
-            animating={loading} />
+        <Text style={{color:'#008000'}}>Processing</Text>
+        <ActivityIndicator size="large" color="#008000" animating={loading} />
         </View>
       </View>
     </Modal>

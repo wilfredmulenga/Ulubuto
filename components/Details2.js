@@ -26,8 +26,11 @@ export default class Details extends Component {
        this.handleSubmit = this.handleSubmit.bind(this)
     }
     handleSMS = async ()=>{
+        this.setState({
+            loading: true
+        })
        await firebase.database()
-        .ref(`Users/${this.state.userUID}`)
+        .ref(`Users/${'RDN8nzjqLahu7Q06l8Dlao4gsX02'}`)
         .push({
             location: this.state.location,
             details: this.state.details,    
@@ -39,14 +42,14 @@ export default class Details extends Component {
         })
         //send an sms
         var message = `New Trash PickUp Request. Location: ${this.state.location}, details: ${this.state.details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
-        await fetch("https://infinite-inlet-68633.herokuapp.com/?message="+message).then((res)=>{
+        await fetch("https://ulubuto-sms-backend.herokuapp.com/sms?message="+message).then((res)=>{
         console.log(res);
         if(res.status == 200){
           //this.setState({sucess: true})
           console.log("success")
           this.setState({
-              loading: true
-          })
+            loading: false
+        })
         }
       }).catch((err)=>{
         console.log("err"+err);
@@ -83,7 +86,7 @@ leftComponent= {<Icon
   onPress={() => this.props.navigation.openDrawer()} />}
 centerComponent={{ text: 'Details', style: { color: '#fff' } }}
 // rightComponent={{ icon: 'home', color: '#fff' }}
-/>{(this.state.loading)?<Loading/>:<View style={styles.container}>
+/>{(this.state.loading)?<Loader loading={this.state.loading}/>:<View style={styles.container}>
 <Loader
           loading={this.state.loading} />
                 <View style={{flex:1}}>

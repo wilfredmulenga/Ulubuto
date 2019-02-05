@@ -3,7 +3,7 @@ import Firebase from './config/firebase'
 import { ScrollView } from 'react-native'
 import { ButtonGroup, Card, Text, Header, Icon  } from 'react-native-elements';
 import TabHeader from './TabHeader'
-import Loading from './Loading'
+import Loader from './Loader'
 
 var element = []
 var listOfOrders
@@ -21,7 +21,8 @@ export default class PendingOrders extends React.Component{
             order : null,
             pendingOrders : [],
             completedOrders : [],
-            selectedIndex: 1
+            selectedIndex: 1,
+            loaded : false
         }
           this.updateIndex = this.updateIndex.bind(this)
         this.loadOrders = this.loadOrders.bind(this)
@@ -97,8 +98,8 @@ centerComponent={{ text: 'Orders', style: { color: '#fff' } }}
       selectedIndex={selectedIndex}
       buttons={buttons}
       containerStyle={{height: 50}}
-    />
-                {(listOfOrders===undefined) ? <Loading/> :(selectedIndex===1)? this.state.pendingOrders.map((element,i)=>
+    />{console.log(this.state.loaded)}
+                {(!this.state.loaded) ? <Loader loading={!this.state.loaded}/> :(selectedIndex===1)? this.state.pendingOrders.map((element,i)=>
                 <Card key={i}>
                 {/* <CardItem header >
                 <Text>Order #</Text>
@@ -113,7 +114,7 @@ centerComponent={{ text: 'Orders', style: { color: '#fff' } }}
                
             </Card>
                 ):null}
-                {(selectedIndex===0)? this.state.completedOrders.map((element,i)=>
+                {(!this.state.loaded) ? <Loader loading={!this.state.loaded}/> :(selectedIndex===0)? this.state.completedOrders.map((element,i)=>
                 <Card key={i}>
                 {/* <CardItem header >
                 <Text>Order #</Text>
