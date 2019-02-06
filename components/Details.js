@@ -173,7 +173,7 @@ centerComponent={{ text: 'Details', style: { color: '#fff' } }}
           <CheckBox title='Food' checked={this.state.checkbox4} onPress={()=>this.setState({checkbox4:!this.state.checkbox4})} />      
           
      </View>
-     <View style={{backgroundColor:'ecf0f1',height:50}}></View>
+     <View style={{backgroundColor:'ecf0f1',height:40}}></View>
      {/* <KeyboardAvoidingView behavior="padding" style={styles.form}>
 
      <Text style={styles.heading}>Contact Number</Text>         
@@ -199,7 +199,7 @@ const styles = {
     backgroundColor: '#ecf0f1',
     paddingLeft : 15,
     paddingRight: 15,
-    paddingTop: 20
+    paddingTop: 10
   },
   heading:{
     fontSize:20,
@@ -223,7 +223,7 @@ const styles = {
   },
   button:{
     flex:1,
-    paddingTop:15,
+    paddingTop:5,
     marginBottom:80
   },
   form: {

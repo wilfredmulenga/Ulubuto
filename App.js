@@ -71,13 +71,13 @@ const MyDrawerNavigator = createDrawerNavigator({
     screen: Map,
   },
   
-  Authentication : {
-    screen : Authentication
-  },
+  // Authentication : {
+  //   screen : Authentication
+  // },
   
-  Auth : {
-    screen : Auth
-  },
+  // Auth : {
+  //   screen : Auth
+  // },
   Details: {
     screen: Details,
   },
@@ -91,9 +91,9 @@ const MyDrawerNavigator = createDrawerNavigator({
     screen : Orders
   },
  
-  Profile : {
-    screen : Profile
-  },
+  // Profile : {
+  //   screen : Profile
+  // },
   
   
 });

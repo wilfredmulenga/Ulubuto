@@ -14,13 +14,13 @@ export default class Details extends Component {
     constructor(props){
      super(props)
      this.state = {
-         time: this.props.navigation.state.params.time,
-         date: this.props.navigation.state.params.date,
-         details: this.props.navigation.state.params.details,
+         time: (this.props.navigation.state.params)?this.props.navigation.state.params.time: null,
+         date: (this.props.navigation.state.params)?this.props.navigation.state.params.date:null,
+         details: (this.props.navigation.state.params)? this.props.navigation.state.params.details: null,
          phoneNumber:'',
          comment : '',
          location : this.props.navigation.getParam('location'),
-         userUID : this.props.navigation.state.params.userUID,
+         userUID : (this.props.navigation.state.params)? this.props.navigation.state.params.userUID: null,
          loading : false
      }
        this.handleSubmit = this.handleSubmit.bind(this)
@@ -91,9 +91,9 @@ centerComponent={{ text: 'Details', style: { color: '#fff' } }}
           loading={this.state.loading} />
                 <View style={{flex:1}}>
                 <Text style={styles.heading}>Contact Number</Text>         
-              <TextInput id='phoneNumber' value={this.state.phoneNumber} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder="0967 999 000" /> 
+              <TextInput style={styles.textInput} id='phoneNumber' value={this.state.phoneNumber} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder="0967 999 000" /> 
               <Text style={styles.heading}>Notes</Text>          
-            <TextInput style={{height:100}} value={this.state.comment}  editable = {true}
+            <TextInput  style={{height:100,backgroundColor:'#fafafa'}} value={this.state.comment}  editable = {true}
          multiline={true} onChangeText={(comment) => this.setState({comment})}
          numberOfLines={4} placeholder="I have assorted my trash..." />
                 </View>
@@ -118,6 +118,9 @@ const styles = {
     paddingLeft : 15,
     paddingRight: 15,    
     justifyContent: 'space-between'
+    },
+    textInput : {
+        backgroundColor: '#fafafa',
     },
     card : {
         marginBottom: 200
