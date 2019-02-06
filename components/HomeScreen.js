@@ -9,9 +9,7 @@ import TabHeader from './TabHeader'
 
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Trash Pickup',
-  };
+  
 
     constructor(props){
       super(props)
@@ -22,7 +20,7 @@ class HomeScreen extends React.Component {
          
       } 
       
-      this.handlebuttonClick = this.handlebuttonClick.bind(this)
+     
       this.handleChange = this.handleChange.bind(this)
     }
 
@@ -32,7 +30,7 @@ class HomeScreen extends React.Component {
       this.setState({
           location: location
       })
-      console.log('in home', this.state.location)
+
   }
 
   handlebuttonClick=()=>{
@@ -49,20 +47,9 @@ class HomeScreen extends React.Component {
            
                 return(
                   <View style={{flex:1}}>
-                  <Header backgroundColor='#008000'
-leftComponent= {<Icon
-  
-  name='menu'
-  type='material'
-  color='#fff'
-  size={32}
- 
-  onPress={() => this.props.navigation.openDrawer()} />}
-centerComponent={{ text: 'Trash PickUp', style: { color: '#fff' } }}
-// rightComponent={{ icon: 'home', color: '#fff' }}
-/>
+                 
                     <Map location={this.state.location} handleChange={this.handleChange} />
-                    <View
+                    {/* <View
         style={{
             position: 'absolute',//use absolute position to show button on top of the map
             top: '85%', //for center align
@@ -76,7 +63,7 @@ centerComponent={{ text: 'Trash PickUp', style: { color: '#fff' } }}
       </View>
     
     
-      </View>
+      </View> */}
                   </View>      
                 )
           

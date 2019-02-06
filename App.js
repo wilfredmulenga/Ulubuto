@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from "react-navigation";
-import HomeScreen from './components/HomeScreen'
+import Map from './components/Map'
 import Details from './components/Details'
 import Details2 from './components/Details2'
 import Orders from './components/Orders'
@@ -68,7 +68,7 @@ const MyDrawerNavigator = createDrawerNavigator({
   
   
   Home: {
-    screen: HomeScreen,
+    screen: Map,
   },
   
   Authentication : {

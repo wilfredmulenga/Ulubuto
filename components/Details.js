@@ -27,7 +27,7 @@ export default class Details extends Component {
     this.handleNext = this.handleNext.bind(this)
     this.handleAuth = this.handleAuth.bind(this)
     this.getCurrentDate = this.getCurrentDate.bind(this)
-    console.log(this.state.location)
+    console.log('details',this.state.location)
    // this.handleAuth()
   }
 
