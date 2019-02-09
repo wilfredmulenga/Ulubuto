@@ -5,12 +5,11 @@
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
-      "ios",
       "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Olive.png",
     "splash": {
       "image": "./assets/ulubuto.png",
       "resizeMode": "contain",
@@ -25,6 +24,9 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": ""
+    "description": "",
+    "android": {
+      "package": "com.ulubuto.ulubuto"
+    }
   }
 }

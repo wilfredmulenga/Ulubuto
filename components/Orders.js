@@ -79,7 +79,7 @@ export default class PendingOrders extends React.Component{
         const { selectedIndex } = this.state
        
         return(
-            <ScrollView>
+            <ScrollView style={{backgroundColor:'#ecf0f1'}}>
                    <Header backgroundColor='#008000'
 leftComponent= {<Icon
   

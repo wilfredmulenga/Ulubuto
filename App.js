@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from "react-navigation";
+import { View } from 'react-native'
 import Map from './components/Map'
 import Details from './components/Details'
 import Details2 from './components/Details2'
@@ -46,8 +47,9 @@ import firebase from './components/config/firebase'
   render() {
     
     return (     
-      
+     
       <MyApp />
+    
     );
   }
 }
