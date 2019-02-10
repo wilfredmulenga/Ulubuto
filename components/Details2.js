@@ -41,7 +41,7 @@ export default class Details extends Component {
             status: 'pending'
         })
         //send an sms
-        var message = `New Trash PickUp Request. Location: ${this.state.location}, details: ${this.state.details}, date of pickup:${this.state.date}, time: ${this.state.time}, phoneNumber: ${this.state.phoneNumber}, comment:${this.state.comment}`
+        var message = `New Trash PickUp Request. Date of Pickup:${this.state.date}, Time: ${this.state.time}, Phone Number: ${this.state.phoneNumber}, Location: ${this.state.location}, Details: ${this.state.details}, Comment:${this.state.comment}`
         await fetch("https://ulubuto-sms-backend.herokuapp.com/sms?message="+message).then((res)=>{
         console.log(res);
         if(res.status == 200){

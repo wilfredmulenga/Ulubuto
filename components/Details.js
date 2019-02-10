@@ -62,7 +62,6 @@ Firebase.auth().onAuthStateChanged((user) => {
      
       
       this.props.navigation.navigate('Details2',{time:this.state.time,date:this.state.date,details:details,userUID:this.state.userUID, location: this.state.location})
-      
     }
   showTime =  async() =>{
     try {

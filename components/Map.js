@@ -64,14 +64,19 @@ onRegionChange(region) {
   //   region : region
   // })
 //   console.log('onRegionChange',region)
-  fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+ region.latitude + ',' + region.longitude + '&key=' + GOOGLE_MAPS_KEY )
-.then((response) => response.json())
-.then((responseJson) => {
-    //console.log("address", JSON.stringify(responseJson.results[1].formatted_address));
+//   fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+ region.latitude + ',' + region.longitude + '&key=' + GOOGLE_MAPS_KEY )
+// .then((response) => response.json())
+// .then((responseJson) => {
+//     //console.log("address", JSON.stringify(responseJson.results[1].formatted_address));
     
-    newLocation = responseJson.results[1].formatted_address
-    console.log(newLocation)
-})
+//     newLocation = responseJson.results[1].formatted_address
+//     console.log(newLocation)
+// })
+//plan for SMS to contain this url so that the receiver can view the location 
+//simply from their phone. right now not all the link is sent, could be a restriction
+//by twilio
+newLocation = encodeURIComponent(`https://www.google.com/maps/search/?api=1&query=${region.latitude},${region.longitude}`)
+
 }
   
 
