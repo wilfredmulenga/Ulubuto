@@ -136,14 +136,14 @@ this.setState({
       
       <ScrollView>
         <Header backgroundColor='#008000'
-leftComponent= {<Icon
+// leftComponent= {<Icon
   
-  name='menu'
-  type='material'
-  color='#fff'
-  size={32}
+//   name='menu'
+//   type='material'
+//   color='#fff'
+//   size={32}
  
-  onPress={() => this.props.navigation.openDrawer()} />}
+//   onPress={() =>  console.log('navigation',this.props.navigation.navigate('MyDrawerNavigator'))} />}
 centerComponent={{ text: 'Details', style: { color: '#fff' } }}
 // rightComponent={{ icon: 'home', color: '#fff' }}
 />

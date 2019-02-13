@@ -4,6 +4,10 @@ import {  Header, Icon } from 'react-native-elements';
 import firebase from './config/firebase'
 import Loader from './Loader'
 import TabHeader from './TabHeader'
+import { createStore } from 'redux'
+import counter from './reducers'
+
+const store = createStore(counter)
 
 export default class Details extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -76,20 +80,21 @@ export default class Details extends Component {
         return(
             <View style={{flex:1}}>
                    <Header backgroundColor='#008000'
-leftComponent= {<Icon
+// leftComponent= {<Icon
   
-  name='menu'
-  type='material'
-  color='#fff'
-  size={32}
+//   name='menu'
+//   type='material'
+//   color='#fff'
+//   size={32}
  
-  onPress={() => this.props.navigation.openDrawer()} />}
+//   onPress={() => this.props.navigation.openDrawer()} />}
 centerComponent={{ text: 'Details', style: { color: '#fff' } }}
 // rightComponent={{ icon: 'home', color: '#fff' }}
 />{(this.state.loading)?<Loader loading={this.state.loading}/>:<View style={styles.container}>
 <Loader
           loading={this.state.loading} />
                 <View style={{flex:1}}>
+                <Text>{store.getState()}</Text>
                 <Text style={styles.heading}>Contact Number</Text>         
               <TextInput style={styles.textInput} id='phoneNumber' value={this.state.phoneNumber} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder="0967 999 000" /> 
               <Text style={styles.heading}>Notes</Text>          

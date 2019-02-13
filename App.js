@@ -5,8 +5,6 @@ import Map from './components/Map'
 import Details from './components/Details'
 import Details2 from './components/Details2'
 import Orders from './components/Orders'
-import {Provider} from 'react-redux';
-import store from './components/store'
 import Firebase from './components/config/firebase'
 import {connect} from 'react-redux'
 import {addUserUID} from './components/actions'
@@ -80,12 +78,12 @@ const MyDrawerNavigator = createDrawerNavigator({
   // Auth : {
   //   screen : Auth
   // },
-  Details: {
-    screen: Details,
-  },
-  Details2: {
-    screen: Details2,
-  },
+  // Details: {
+  //   screen: Details,
+  // },
+  // Details2: {
+  //   screen: Details2,
+  // },
   // Demo: {
   //   screen : Demo
   // },
@@ -100,7 +98,15 @@ const MyDrawerNavigator = createDrawerNavigator({
   
 });
 
-const MyApp = createAppContainer(MyDrawerNavigator);
+const Stack = createStackNavigator({
+  Drawer: MyDrawerNavigator,
+  Details : Details,
+  Details2 : Details2
+},{
+  headerMode: 'none',
+})
+
+const MyApp = createAppContainer(Stack);
 
 
   
