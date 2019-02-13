@@ -9,6 +9,7 @@ import Firebase from './components/config/firebase'
 import {connect} from 'react-redux'
 import {addUserUID} from './components/actions'
 import Demo from './components/Demo'
+import Swipers from './components/Swipers'
 import Profile from './components/Profile'
 import Authentication from './components/Authentication'
 import Auth from './components/Auth'
@@ -91,6 +92,7 @@ const MyDrawerNavigator = createDrawerNavigator({
     screen : Orders
   },
  
+ 
   // Profile : {
   //   screen : Profile
   // },
@@ -101,9 +103,11 @@ const MyDrawerNavigator = createDrawerNavigator({
 const Stack = createStackNavigator({
   Drawer: MyDrawerNavigator,
   Details : Details,
-  Details2 : Details2
+  Details2 : Details2,
+  Swipers: Swipers
 },{
   headerMode: 'none',
+  initialRouteName:'Swipers'
 })
 
 const MyApp = createAppContainer(Stack);
